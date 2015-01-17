@@ -6,4 +6,19 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_server_select">ServerSelectActivity</string>
 
+
+    <string name="left_click">Left</string>
+    <string name="right_click">Right</string>
+    <string name="up_scroll">Scroll +</string>
+    <string name="down_scroll">Scroll -</string>
+    <string name="control">Ctrl</string>
+    <string name="alt">Alt</string>
+    <string name="delete">Delete</string>
+    <string name="shift">Shift</string>
+    <string name="back">Backspace</string>
+    <string name="tab">Tab</string>
+    <string name="enter">Enter</string>
+    <string name="text_hint">Press To Type</string>
+
+
 </resources>

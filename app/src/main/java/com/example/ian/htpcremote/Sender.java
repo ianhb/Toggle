@@ -19,13 +19,6 @@ import java.net.UnknownHostException;
  */
 public class Sender {
 
-    public static final String MOUSE_CLICK = "CLICK";
-    public static final String MOUSE_RELEASE = "RELEASE";
-    public static final String MOUSE_SCROLL = "SCROLL";
-    public static final String MOUSE_MOVE = "MOVE";
-    public static final String MOUSE_STOP = "STOP";
-    public static final String TEXT = "TEXT";
-
     public static final String CLOSE_CONNECTION = "CLOSE";
     public static final String LOGIN = "LOGIN";
 
@@ -52,6 +45,10 @@ public class Sender {
 
     public void sendCommand(String type, int mes) {
         sendCommand(type, mes + "");
+    }
+
+    public void sendMouseMove(int x, int y) {
+        sendCommand(Constants.MOUSE_MOVE, x + ":" + y);
     }
 
     public void sendCommand(String type, String mes) {

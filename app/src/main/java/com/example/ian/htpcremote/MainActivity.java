@@ -8,121 +8,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements View.OnTouchListener {
 
-    Button left;
-    Button right;
-    Button up;
-    Button down;
-    Button click_left;
-    Button click_right;
-    Button scroll_up;
-    Button scroll_down;
-    EditText text;
-
+    MouseControl mControl;
+    TypeBox text;
     Sender sender;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String ip = getIntent().getStringExtra("server_ip");
         new ConnectTask().execute(ip);
 
-        left = (Button) findViewById(R.id.button_left);
-        right = (Button) findViewById(R.id.button_right);
-        up = (Button) findViewById(R.id.button_up);
-        down = (Button) findViewById(R.id.button_down);
+        text = (TypeBox) findViewById(R.id.text);
+        text.setActivity(this);
 
-        scroll_up = (Button) findViewById(R.id.button_scroll_up);
-        scroll_down = (Button) findViewById(R.id.button_scroll_down);
+        mouseButtons();
+        specialButtons();
+    }
 
-        click_left = (Button) findViewById(R.id.button_click_left);
-        click_right = (Button) findViewById(R.id.button_click_right);
-
-        text = (EditText) findViewById(R.id.text);
-
-        Button sendText = (Button) findViewById(R.id.send_text);
-        sendText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = text.getText().toString();
-                sender.sendCommand(Sender.TEXT, message);
-            }
-        });
-
-        left.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseMove(-1, 0, event);
-                return false;
-            }
-        });
-        right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseMove(1, 0, event);
-                return false;
-            }
-        });
-        up.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseMove(0, 1, event);
-                return false;
-            }
-        });
-        down.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseMove(0, -1, event);
-                return false;
-            }
-        });
-
-
-        scroll_up.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseScroll(-1, event);
-                return false;
-            }
-        });
-
-        scroll_down.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseScroll(1, event);
-                return false;
-            }
-        });
-
-
-        click_left.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseClick(1, event);
-                return false;
-            }
-        });
-        click_right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sendMouseClick(2, event);
-                return false;
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -135,32 +46,67 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void sendMouseClick(int button, MotionEvent event) {
+    private void controlMouse(MotionEvent event) {
+        mControl.onTouch(event);
+    }
+
+    private void specialButtons() {
+        findViewById(R.id.button_shift).setOnTouchListener(this);
+        findViewById(R.id.button_delete).setOnTouchListener(this);
+        findViewById(R.id.button_alt).setOnTouchListener(this);
+        findViewById(R.id.button_ctrl).setOnTouchListener(this);
+    }
+
+    public boolean onTouch(View v, MotionEvent event) {
+        int type = 0;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            sender.sendCommand(Sender.MOUSE_CLICK, button);
+            type = 1;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            sender.sendCommand(Sender.MOUSE_RELEASE, button);
+            type = 2;
         }
+        String key = null;
+        switch (v.getId()) {
+            case R.id.button_shift:
+                key = Constants.SHIFT;
+                break;
+            case R.id.button_delete:
+                key = Constants.DELETE;
+                break;
+            case R.id.button_alt:
+                key = Constants.ALT;
+                break;
+            case R.id.button_ctrl:
+                key = Constants.CTRL;
+                break;
+            case R.id.button_click_left:
+                key = Constants.LEFT;
+                type += 3;
+                break;
+            case R.id.button_click_right:
+                key = Constants.RIGHT;
+                type += 3;
+                break;
+        }
+        if (type != 0 && type != 3) {
+            sender.sendCommand(Constants.SPECIAL, key + ":" + type);
+        }
+        return true;
     }
 
-    private void sendMouseScroll(int x, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            sender.sendCommand(Sender.MOUSE_SCROLL, x);
-        }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            sender.sendCommand(Sender.MOUSE_SCROLL, 0);
-        }
+    private void mouseButtons() {
+        FrameLayout mousePad = (FrameLayout) findViewById(R.id.mouse_pad);
+        mControl = new MouseControl(this);
+        mousePad.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                controlMouse(event);
+                return true;
+            }
+        });
+        findViewById(R.id.button_click_left).setOnTouchListener(this);
+        findViewById(R.id.button_click_right).setOnTouchListener(this);
     }
 
-    private void sendMouseMove(int x, int y, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            sender.sendCommand(Sender.MOUSE_MOVE, x + ":" + y);
-        }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            sender.sendCommand(Sender.MOUSE_STOP, null);
-        }
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
