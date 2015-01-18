@@ -8,12 +8,14 @@
         android:id="@+id/server_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start" />
+        android:layout_gravity="start"
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
     <TextView
         android:id="@+id/server_ip"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end" />
+        android:layout_gravity="end"
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
 </FrameLayout>

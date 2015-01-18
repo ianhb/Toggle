@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hint_foreground_material_dark"
+    android:orientation="vertical">
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/space"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="@dimen/abc_action_bar_default_height_material"
+        android:text="@string/no_servers"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/button_rescan"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space"
+        android:layout_centerHorizontal="true"
+        android:text="@string/action_rescan" />
+
+
+</RelativeLayout>

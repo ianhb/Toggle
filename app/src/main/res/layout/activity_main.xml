@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="@string/shift" />
 
-        <com.example.ian.htpcremote.TypeBox
+        <com.example.ian.toggle.TypeBox
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,8 +79,6 @@
             android:layout_gravity="end"
             android:text="@string/delete" />
     </FrameLayout>
-
-
 
 
 </LinearLayout>
