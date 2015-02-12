@@ -1,4 +1,4 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 /**
  * Server Object to store and compare servers on network

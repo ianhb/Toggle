@@ -1,10 +1,9 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -42,7 +41,6 @@ public class MainActivity extends ActionBarActivity implements View.OnTouchListe
     public void onPause() {
         super.onPause();
         if (sender != null) {
-            Log.d("TCP", "Closing Socket");
             sender.stopClient();
             sender = null;
         }
@@ -134,7 +132,6 @@ public class MainActivity extends ActionBarActivity implements View.OnTouchListe
     public class ConnectTask extends AsyncTask<String, String, Sender> {
         @Override
         protected Sender doInBackground(String... params) {
-            Log.d("TCP", "Connecting to Server");
             sender = new Sender(getApplicationContext(), params[0]);
             sender.run();
             return sender;

@@ -1,4 +1,4 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

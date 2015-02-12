@@ -1,21 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release_signing_config {
+            keyAlias 'toggle_key'
+            keyPassword System.getenv("KEYPWD")
+            storeFile file('C:/Users/Ian/AndroidStudioProjects/Keystore/toggle_key.jks')
+            storePassword System.getenv("KSTOREPWD")
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "20.0.0"
-
     defaultConfig {
-        applicationId "com.example.ian.toggle"
+        applicationId 'me.eighttenlabs.toggle'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 3
-        versionName "0.3.0"
+        versionCode 4
+        versionName "1.0.0"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release_signing_config
         }
+    }
+    productFlavors {
     }
 }
 

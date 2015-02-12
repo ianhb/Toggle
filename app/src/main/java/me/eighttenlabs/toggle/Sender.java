@@ -1,10 +1,9 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -115,8 +114,6 @@ public class Sender {
                     socket = null;
                 }
             }
-
-            Log.d("TCP", "Socket Opened");
             try {
                 if (socket != null) {
                     bufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
@@ -127,9 +124,7 @@ public class Sender {
                     run = false;
                 }
                 while (run) {
-                    Log.d("TCP", "Reading Message");
                     serverMessage = bufferIn.readLine();
-                    Log.d("TCP", serverMessage);
                     if (awaitingConfirmation) {
                         if (serverMessage.equals(ACKNOWLEDGE + sentMessage)) {
                             bufferOut.println(ACKNOWLEDGE);
@@ -145,7 +140,6 @@ public class Sender {
                     }
                 }
             } catch (Exception e) {
-                Log.d("TCP", "Error sending or receiving message");
                 e.printStackTrace();
             }
 
@@ -153,7 +147,6 @@ public class Sender {
                 socket.close();
             }
         } catch (Exception e) {
-            Log.d("TCP", "Error opening or closing socket");
             e.printStackTrace();
         }
     }
@@ -171,7 +164,6 @@ public class Sender {
                 deviceName = manufacturer + " " + model;
             }
         }
-        Log.d("TCP", "Sending Login Request");
         sendCommand(LOGIN, uid + ":" + deviceName);
         String loginResponse = "defaultString";
         try {

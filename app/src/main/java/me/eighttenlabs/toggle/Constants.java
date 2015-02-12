@@ -1,4 +1,4 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 /**
  * Constants file that stores the keys for the TCP commands

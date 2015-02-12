@@ -1,4 +1,4 @@
-package com.example.ian.toggle;
+package me.eighttenlabs.toggle;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -184,12 +183,10 @@ public class ServerSelectActivity extends ActionBarActivity {
                         }
                     }
                 }
-                Log.d("UDP", "Broadcast sent");
                 WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
                 int ipAddress = wm.getConnectionInfo().getIpAddress();
                 String address = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
                         (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
-                Log.d("UDP", address);
                 socket.setSoTimeout(1000);
                 while (true) {
                     try {
@@ -198,17 +195,11 @@ public class ServerSelectActivity extends ActionBarActivity {
                         socket.receive(received);
 
                         String message = new String(received.getData()).trim();
-                        Log.d("UDP Received", received.getAddress().toString());
-                        Log.d("UDP Received", message);
                         if (message.substring(0, RECEIVE_CODE.length()).equals(RECEIVE_CODE)) {
                             availableServers.add(new Server(message.substring(RECEIVE_CODE.length() + 1), received.getAddress().toString().substring(1)));
                         }
                     } catch (SocketTimeoutException e) {
-                        Log.d("UDP", "Search finished");
                         socket.close();
-                        for (Server s : availableServers) {
-                            Log.d("UDP", s.name);
-                        }
                         return availableServers;
                     }
                 }
