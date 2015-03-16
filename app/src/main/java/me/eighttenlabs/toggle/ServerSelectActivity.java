@@ -1,10 +1,12 @@
 package me.eighttenlabs.toggle;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,19 +28,29 @@ public class ServerSelectActivity extends ActionBarActivity {
 
     public static final int SOCKET = 4567;
 
+    public SharedPreferences preference;
+
     ArrayList<Server> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkSearch search = new NetworkSearch();
-        ArrayList<Server> servers = null;
-        try {
-            servers = search.execute("").get();
-        } catch (Exception e) {
-            e.printStackTrace();
+        NetworkSearch search = new NetworkSearch(this);
+        search.execute();
+        setContentView(R.layout.activity_server_select);
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (list != null && !list.isEmpty()) {
+            new PairServer(list, null).execute();
         }
-        list = servers;
+    }
+
+    protected void onSearchComplete(ArrayList<Server> list) {
+        this.list = list;
         if (list == null || list.isEmpty()) {
             setContentView(R.layout.activity_server_select_emptylist);
             findViewById(R.id.button_rescan).setOnClickListener(new View.OnClickListener() {
@@ -49,7 +61,6 @@ public class ServerSelectActivity extends ActionBarActivity {
             });
             return;
         }
-        setContentView(R.layout.activity_server_select);
         ListView serverList = (ListView) findViewById(R.id.server_list);
         ServerAdapter adapter = new ServerAdapter(ServerSelectActivity.this, list);
         serverList.setAdapter(adapter);
@@ -57,22 +68,14 @@ public class ServerSelectActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Server server = (Server) parent.getItemAtPosition(position);
-                PairServer ps = new PairServer(list, server);
-                list = null;
+                PairServer ps = new PairServer(ServerSelectActivity.this.list, server);
+                ServerSelectActivity.this.list = null;
                 ps.execute();
-                Intent intent = new Intent(ServerSelectActivity.this, MainActivity.class);
+                Intent intent = new Intent(ServerSelectActivity.this, ControllerActivity.class);
                 intent.putExtra("server_ip", server.ip);
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (list != null && !list.isEmpty()) {
-            new PairServer(list, null).execute();
-        }
     }
 
     @Override
@@ -92,6 +95,8 @@ public class ServerSelectActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_rescan:
                 rescanNetwork();
@@ -141,13 +146,25 @@ public class ServerSelectActivity extends ActionBarActivity {
         }
     }
 
-    private class NetworkSearch extends AsyncTask<String, String, ArrayList<Server>> {
+    private class NetworkSearch extends AsyncTask<Void, Void, ArrayList<Server>> {
 
         public static final String SEND_CODE = "DISCOVER_REMOTESERVER_REQUEST";
         public static final String RECEIVE_CODE = "DISCOVER_REMOTESERVER_RESPONSE";
 
+        private ProgressDialog dialog;
+
+        public NetworkSearch(Context c) {
+            dialog = new ProgressDialog(c);
+        }
+
         @Override
-        protected ArrayList<Server> doInBackground(String... params) {
+        protected void onPreExecute() {
+            dialog.setMessage(getString(R.string.server_search_message));
+            dialog.show();
+        }
+
+        @Override
+        protected ArrayList<Server> doInBackground(Void... params) {
             ArrayList<Server> availableServers = new ArrayList<>();
             DatagramSocket socket = null;
             try {
@@ -183,11 +200,7 @@ public class ServerSelectActivity extends ActionBarActivity {
                         }
                     }
                 }
-                WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                int ipAddress = wm.getConnectionInfo().getIpAddress();
-                String address = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
-                        (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
-                socket.setSoTimeout(1000);
+                socket.setSoTimeout(Integer.parseInt(preference.getString(getString(R.string.pref_timeout), "1")) * 1000);
                 while (true) {
                     try {
                         byte[] receiveBuffer = new byte[15000];
@@ -211,6 +224,12 @@ public class ServerSelectActivity extends ActionBarActivity {
                 socket.close();
             }
             return availableServers;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Server> servers) {
+            dialog.dismiss();
+            ServerSelectActivity.this.onSearchComplete(servers);
         }
     }
 }

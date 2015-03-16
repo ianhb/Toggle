@@ -19,7 +19,7 @@ import android.widget.TextView;
  */
 public class TypeBox extends EditText {
 
-    MainActivity activity;
+    ControllerActivity activity;
 
     public TypeBox(Context context) {
         super(context);
@@ -33,7 +33,7 @@ public class TypeBox extends EditText {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setActivity(final MainActivity act) {
+    public void setActivity(final ControllerActivity act) {
         activity = act;
         addTextChangedListener(new Watcher());
         setImeOptions(EditorInfo.IME_ACTION_NONE);

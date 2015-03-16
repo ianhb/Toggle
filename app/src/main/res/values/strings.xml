@@ -3,11 +3,20 @@
 
     <string name="app_name">Toggle</string>
     <string name="title_activity_server_select">Select Server</string>
+    <string name="title_activity_search_settings">Settings</string>
+
+    #Action Bar Strings
+    <string name="action_settings">Settings</string>
+    <string name="action_rescan">Rescan for Servers</string>
+
+    #UI Strings
+    #ServerSelect
     <string name="server_name">Server Name</string>
     <string name="server_ip">IP Address</string>
     <string name="no_servers">No Servers Found on Network</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_rescan">Rescan for Servers</string>
+    <string name="server_search_message">Searching for Servers</string>
+
+    #Controller
     <string name="left_click">Left</string>
     <string name="right_click">Right</string>
     <string name="up_scroll">Scroll +</string>
@@ -20,7 +29,17 @@
     <string name="tab">Tab</string>
     <string name="enter">Enter</string>
     <string name="text_hint">Press To Type</string>
-    <string name="title_activity_splash">Toggle</string>
-    <string name="hello_world">Hello world!</string>
+
+    #Preference Strings
+    <string name="pref_screen_title">Settings</string>
+    <string name="pref_screen_key">settings_screen</string>
+
+    <string name="pref_timeout">Search Timeout</string>
+    <string name="pref_timeout_desc">Search for Servers (seconds)</string>
+    <string name="pref_timeout_def">1</string>
+
+    <string name="pref_name">Device Name</string>
+    <string name="pref_name_desc">Name sent to servers to authenticate</string>
+
 
 </resources>

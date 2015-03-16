@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnTouchListener {
+public class ControllerActivity extends ActionBarActivity implements View.OnTouchListener {
 
     MouseControl mControl;
     TypeBox text;
@@ -140,13 +140,13 @@ public class MainActivity extends ActionBarActivity implements View.OnTouchListe
         @Override
         protected void onPostExecute(Sender sender) {
             if (sender != null && !sender.isSystemStop()) {
-                Toast rejectToast = Toast.makeText(MainActivity.this, "Connection Failed", Toast.LENGTH_LONG);
+                Toast rejectToast = Toast.makeText(ControllerActivity.this, "Connection Failed", Toast.LENGTH_LONG);
                 rejectToast.show();
             }
-            Intent intent = new Intent(MainActivity.this, ServerSelectActivity.class);
+            Intent intent = new Intent(ControllerActivity.this, ServerSelectActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            MainActivity.this.startActivity(intent);
-            MainActivity.this.finish();
+            ControllerActivity.this.startActivity(intent);
+            ControllerActivity.this.finish();
         }
     }
 }

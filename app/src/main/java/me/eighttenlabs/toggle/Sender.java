@@ -2,7 +2,9 @@ package me.eighttenlabs.toggle;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
 import java.io.BufferedReader;
@@ -38,6 +40,8 @@ public class Sender {
     private String uid;
     private boolean systemStop;
 
+    private SharedPreferences preferences;
+
     public Sender(Context context, String address) {
         this.context = context;
         try {
@@ -45,6 +49,7 @@ public class Sender {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void sendCommand(String type, int mes) {
@@ -154,7 +159,7 @@ public class Sender {
     private boolean login() {
         TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         uid = tManager.getDeviceId();
-        String deviceName = BluetoothAdapter.getDefaultAdapter().getName();
+        String deviceName = preferences.getString("pref_name", BluetoothAdapter.getDefaultAdapter().getName());
         if (deviceName == null) {
             String manufacturer = Build.MANUFACTURER;
             String model = Build.MODEL;

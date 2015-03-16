@@ -11,10 +11,10 @@ import android.view.VelocityTracker;
  */
 public class MouseControl {
 
-    MainActivity activity;
+    ControllerActivity activity;
     private VelocityTracker tracker = null;
 
-    public MouseControl(MainActivity activity) {
+    public MouseControl(ControllerActivity activity) {
         this.activity = activity;
     }
 
