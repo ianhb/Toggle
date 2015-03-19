@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        release_signing_config {
-            keyAlias 'toggle_key'
+        release {
+            keyAlias 'ian'
             keyPassword System.getenv("KEYPWD")
-            storeFile file('C:/Users/Ian/AndroidStudioProjects/Keystore/toggle_key.jks')
+            storeFile file('C:/Users/Ian/AndroidStudioProjects/Keystore/810labskey.jks')
             storePassword System.getenv("KSTOREPWD")
         }
     }
@@ -22,7 +22,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release_signing_config
         }
     }
     productFlavors {
