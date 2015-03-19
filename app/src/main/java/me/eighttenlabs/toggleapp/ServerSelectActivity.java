@@ -1,4 +1,4 @@
-package me.eighttenlabs.toggle;
+package me.eighttenlabs.toggleapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;

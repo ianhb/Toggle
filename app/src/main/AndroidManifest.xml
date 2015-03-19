@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.eighttenlabs.toggle">
+    package="me.eighttenlabs.toggleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ServerSelectActivity"
+            android:name="me.eighttenlabs.toggleapp.ServerSelectActivity"
             android:label="@string/app_name">
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,16 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ControllerActivity"
+            android:name="me.eighttenlabs.toggleapp.ControllerActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="me.eighttenlabs.toggleapp.SettingsActivity"
             android:label="@string/title_activity_search_settings"
-            android:parentActivityName=".ServerSelectActivity">
+            android:parentActivityName="me.eighttenlabs.toggleapp.ServerSelectActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.eighttenlabs.toggle.ServerSelectActivity" />
+                android:value="me.eighttenlabs.toggleapp.ServerSelectActivity" />
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package me.eighttenlabs.toggle;
+package me.eighttenlabs.toggleapp;
 
 /**
  * Constants file that stores the keys for the TCP commands

@@ -1,4 +1,4 @@
-package me.eighttenlabs.toggle;
+package me.eighttenlabs.toggleapp;
 
 import android.support.v4.view.VelocityTrackerCompat;
 import android.view.MotionEvent;

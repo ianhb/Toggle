@@ -12,11 +12,11 @@ android {
     compileSdkVersion 21
     buildToolsVersion "20.0.0"
     defaultConfig {
-        applicationId 'me.eighttenlabs.toggle'
+        applicationId 'me.eighttenlabs.toggleapp'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 5
-        versionName "1.0.1"
+        versionCode 1
+        versionName "1.0.0"
     }
     buildTypes {
         release {
